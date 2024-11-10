@@ -49,6 +49,13 @@ url = tkinter.StringVar()
 link = tkinter.Entry(app, width=50, textvariable=url)
 link.pack()
 
+# Quality selection
+quality_var = tkinter.StringVar(app)
+quality_options = ["144p", "360p", "720p", "1080p"]
+quality_dropdown = tkinter.OptionMenu(app, quality_var, *quality_options)
+quality_var.set("1080p")
+quality_dropdown.pack()
+
 
 # progress bar
 progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='determinate')
