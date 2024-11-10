@@ -3,6 +3,8 @@
 
 Ein Python-basiertes Tool, das es Nutzern ermöglicht, YouTube-Videos einfach herunterzuladen. Dieses Projekt nutzt die **pytube**-Bibliothek zur Videodownload-Verarbeitung.
 
+<img src="https://github.com/user-attachments/assets/d333167a-6c80-454b-816e-54f6219462c0" alt="Video-Download Screenshot" width="500"/>
+
 ## Inhaltsverzeichnis
 
 - [Features](#features)
@@ -13,6 +15,7 @@ Ein Python-basiertes Tool, das es Nutzern ermöglicht, YouTube-Videos einfach he
 ## Features
 
 - **Videos herunterladen**: YouTube-Videos direkt auf dein Gerät herunterladen.
+
 - **Videoauflösung auswählen**: Unterstützt verschiedene Auflösungen.
 
 ## Anforderungen
