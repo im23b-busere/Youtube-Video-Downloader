@@ -1,18 +1,18 @@
 import tkinter
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 from pytubefix import YouTube
 
 
 def download_video():
     try:
-        #show hidden progress bar
+        # show hidden progress bar
         progress_bar.pack()
         app.update_idletasks()
 
         yt_link = link.get()
         yt_obj = YouTube(yt_link, on_progress_callback=progress_function)
 
-        yt_obj.streams.get_highest_resolution().download()
+        yt_obj.streams.get_highest_resolution().download(output_path=save_location.get())
         tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
 
     except Exception as err:
@@ -29,6 +29,11 @@ def progress_function(stream, chunk, bytes_remaining):
 
     progress_bar["value"] = percent_complete
     app.update_idletasks()
+
+
+def choose_directory():
+    folder_path = tkinter.filedialog.askdirectory()
+    save_location.set(folder_path)
 
 
 # creating app frame
@@ -49,13 +54,21 @@ url = tkinter.StringVar()
 link = tkinter.Entry(app, width=50, textvariable=url)
 link.pack()
 
-# Quality selection
+# Quality selection and file location frame
+quality_frame = tkinter.Frame(app)
+quality_frame.pack(pady=10)
+
+# Quality selection dropdown
 quality_var = tkinter.StringVar(app)
 quality_options = ["144p", "360p", "720p", "1080p"]
-quality_dropdown = tkinter.OptionMenu(app, quality_var, *quality_options)
+quality_dropdown = tkinter.OptionMenu(quality_frame, quality_var, *quality_options)
 quality_var.set("1080p")
-quality_dropdown.pack()
+quality_dropdown.pack(side="left")
 
+# file location
+save_location = tkinter.StringVar()
+folder_button = tkinter.Button(quality_frame, text="Choose Save Folder", command=choose_directory)
+folder_button.pack(side="left", padx=10)
 
 # progress bar
 progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='determinate')
