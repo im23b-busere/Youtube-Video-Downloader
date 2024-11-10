@@ -1,8 +1,19 @@
 import tkinter
+from tkinter import messagebox
+from pytube import YouTube
+from sys import argv
 
 
 def download_video():
-    pass
+    try:
+        yt_link = link.get()
+        yt_obj = YouTube(yt_link)
+
+        yt_obj.streams.get_highest_resolution().download()
+        tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
+
+    except Exception as err:
+        tkinter.messagebox.showerror("Error", f"An error occurred: {err}")
 
 
 # creating app frame
