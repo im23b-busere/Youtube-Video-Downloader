@@ -1,6 +1,6 @@
 import tkinter
 from tkinter import messagebox
-from pytube import YouTube
+from pytubefix import YouTube
 from sys import argv
 
 
