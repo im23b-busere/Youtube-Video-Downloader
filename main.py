@@ -12,8 +12,16 @@ def download_video():
         yt_link = link.get()
         yt_obj = YouTube(yt_link, on_progress_callback=progress_function)
 
-        yt_obj.streams.get_highest_resolution().download(output_path=save_location.get())
-        tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
+        # get selected video quality
+        selected_quality = quality_var.get()
+        vid_sel_qual = yt_obj.streams.filter(res=selected_quality, progressive=True).first()
+
+        if vid_sel_qual != None:
+            vid_sel_qual.download(output_path=save_location.get())
+            tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
+
+        else:
+            tkinter.messagebox.showerror(f"Error", f"Selected video quality ({selected_quality}) not available.")
 
     except Exception as err:
         tkinter.messagebox.showerror("Error", f"An error occurred: {err}")
@@ -60,8 +68,8 @@ quality_frame.pack(pady=10)
 
 # Quality selection dropdown
 quality_var = tkinter.StringVar(app)
-quality_options = ["144p", "360p", "720p", "1080p"]
-quality_dropdown = tkinter.OptionMenu(quality_frame, quality_var, *quality_options)
+quality_options = ["144p", "360p", "480p", "720p", "1080p"]
+quality_dropdown = tkinter.OptionMenu(quality_frame, quality_var, * quality_options)
 quality_var.set("1080p")
 quality_dropdown.pack(side="left")
 
@@ -75,7 +83,6 @@ progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='deter
 progress_bar.pack(padx=20, pady=20)
 progress_bar.pack_forget()
 
-
 # download button
 download = tkinter.Button(app, text="Download", command=download_video)
 download.pack(padx=20, pady=20)
@@ -83,7 +90,6 @@ download.pack(padx=20, pady=20)
 # footer
 copyright = tkinter.Label(app, text=" © 2024 Erik. All rights reserved.", font=("Arial", 10), fg="grey")
 copyright.pack(padx=20, pady=0)
-
 
 # loop to run
 app.mainloop()
