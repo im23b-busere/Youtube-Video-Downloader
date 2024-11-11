@@ -20,6 +20,9 @@ def download_video():
             vid_sel_qual.download(output_path=save_location.get())
             tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
 
+        elif selected_quality == "select quality":
+            tkinter.messagebox.showerror(f"Error", "No video quality selected.")
+
         else:
             tkinter.messagebox.showerror(f"Error", f"Selected video quality ({selected_quality}) not available.")
 
@@ -70,7 +73,7 @@ quality_frame.pack(pady=10)
 quality_var = tkinter.StringVar(app)
 quality_options = ["144p", "360p", "480p", "720p", "1080p"]
 quality_dropdown = tkinter.OptionMenu(quality_frame, quality_var, * quality_options)
-quality_var.set("1080p")
+quality_var.set("select quality")
 quality_dropdown.pack(side="left")
 
 # file location
