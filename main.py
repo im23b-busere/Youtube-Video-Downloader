@@ -22,7 +22,7 @@ def download_video():
         response = requests.get(thumbnail_path)
         img_data = response.content
 
-        img = Image.open(BytesIO(img_data)).resize((100, 100))
+        img = Image.open(BytesIO(img_data)).resize((100, 70))
 
         img_tk = ImageTk.PhotoImage(img)
 
@@ -76,6 +76,10 @@ app.geometry("600x400")
 title = tkinter.Label(app, text="Youtube Downloader", font=("Arial", 20))
 title.pack(padx=20, pady=20)
 
+# thumbnail label
+thumbnail_label = tkinter.Label(app)
+thumbnail_label.pack(pady=5)
+
 # url label
 url_label = tkinter.Label(app, text="Enter the URL below:", font=("Arial", 12), fg="grey")
 url_label.pack()
@@ -101,9 +105,6 @@ save_location = tkinter.StringVar()
 folder_button = tkinter.Button(quality_frame, text="Choose Save Folder", command=choose_directory)
 folder_button.pack(side="left", padx=10)
 
-# thumbnail label
-thumbnail_label = tkinter.Label(app)
-thumbnail_label.pack(pady=5)
 
 # progress bar
 progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='determinate')
