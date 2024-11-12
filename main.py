@@ -22,7 +22,7 @@ def download_video():
         response = requests.get(thumbnail_path)
         img_data = response.content
 
-        img = Image.open(BytesIO(img_data)).resize((100, 70))
+        img = Image.open(BytesIO(img_data)).resize((200, 140))
 
         img_tk = ImageTk.PhotoImage(img)
 
@@ -70,7 +70,7 @@ def choose_directory():
 # creating app frame
 app = tkinter.Tk()
 app.title("Youtube Downloader by Erik")
-app.geometry("600x400")
+app.geometry("720x480")
 
 # UI elements
 title = tkinter.Label(app, text="Youtube Downloader", font=("Arial", 20))
