@@ -1,6 +1,9 @@
 import tkinter
 from tkinter import messagebox, ttk, filedialog
+from PIL import Image, ImageTk
+import requests
 from pytubefix import YouTube
+from io import BytesIO
 
 
 def download_video():
@@ -11,6 +14,23 @@ def download_video():
 
         yt_link = link.get()
         yt_obj = YouTube(yt_link, on_progress_callback=progress_function)
+
+
+        # saving thumbnail into memory and displaying it
+        thumbnail_path = yt_obj.thumbnail_url
+
+        response = requests.get(thumbnail_path)
+        img_data = response.content
+
+        img = Image.open(BytesIO(img_data)).resize((100, 100))
+
+        img_tk = ImageTk.PhotoImage(img)
+
+        thumbnail_label.configure(image=img_tk)
+        thumbnail_label.image = img_tk
+
+        # avoid garbage collection
+        thumbnail_label.image = img_tk
 
         # get selected video quality
         selected_quality = quality_var.get()
@@ -80,6 +100,10 @@ quality_dropdown.pack(side="left")
 save_location = tkinter.StringVar()
 folder_button = tkinter.Button(quality_frame, text="Choose Save Folder", command=choose_directory)
 folder_button.pack(side="left", padx=10)
+
+# thumbnail label
+thumbnail_label = tkinter.Label(app)
+thumbnail_label.pack(pady=5)
 
 # progress bar
 progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='determinate')
