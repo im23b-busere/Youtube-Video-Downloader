@@ -13,6 +13,7 @@ Ein Python-basiertes Tool, das es Nutzern ermöglicht, YouTube-Videos einfach he
 - [Anforderungen](#anforderungen)
 - [Installation](#installation)
 - [Verwendung](#verwendung)
+- [Autor](#autor)
 
 ## Features
 
@@ -51,3 +52,9 @@ Zum Ausführen dieses Projekts benötigst du:
 2. Gib die URL des YouTube-Videos ein, das du herunterladen möchtest.
 3. Wähle die gewünschte Videoauflösung oder die Audio-Option.
 4. Gib den Zielordner für das heruntergeladene Video an.
+
+
+## Autor
+
+**[im23b-busere](https://github.com/im23b-busere)**  
+Feedback oder Vorschläge? Öffne ein Issue oder erstelle einen Pull-Request!
