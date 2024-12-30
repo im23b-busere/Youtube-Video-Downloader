@@ -4,7 +4,8 @@ from PIL import Image, ImageTk
 import requests
 from pytubefix import YouTube
 from io import BytesIO
-
+from moviepy.editor import VideoFileClip, AudioFileClip
+import threading
 
 def download_video():
     try:
@@ -14,7 +15,6 @@ def download_video():
 
         yt_link = link.get()
         yt_obj = YouTube(yt_link, on_progress_callback=progress_function)
-
 
         # saving thumbnail into memory and displaying it
         thumbnail_path = yt_obj.thumbnail_url
@@ -34,10 +34,22 @@ def download_video():
 
         # get selected video quality
         selected_quality = quality_var.get()
-        vid_sel_qual = yt_obj.streams.filter(res=selected_quality, progressive=True).first()
+        video_stream = yt_obj.streams.filter(res=selected_quality, file_extension='mp4', progressive=False, only_video=True).first()
+        audio_stream = yt_obj.streams.filter(only_audio=True, file_extension='mp4').first()
 
-        if vid_sel_qual != None:
-            vid_sel_qual.download(output_path=save_location.get())
+        if video_stream and audio_stream:
+            video_path = video_stream.download(output_path=save_location.get(), filename='video.mp4')
+            audio_path = audio_stream.download(output_path=save_location.get(), filename='audio.mp4')
+
+            # Merge video and audio
+            #-------------------------------------------------------------------------------------------#
+            # BIG THANKS TO: https://github.com/JuanBindez/pytubefix/issues/367#issuecomment-2552099244 #
+            #-------------------------------------------------------------------------------------------#
+            video_clip = VideoFileClip(video_path)
+            audio_clip = AudioFileClip(audio_path)
+            final_clip = video_clip.set_audio(audio_clip)
+            final_clip.write_videofile(f"{save_location.get()}/final_video.mp4", codec='libx264')
+
             tkinter.messagebox.showinfo("Success", "Video downloaded successfully!")
 
         elif selected_quality == "select quality":
@@ -53,7 +65,6 @@ def download_video():
         progress_bar.pack_forget()
         app.update_idletasks()
 
-
 def progress_function(stream, chunk, bytes_remaining):
     total_size = stream.filesize
     percent_complete = int((total_size - bytes_remaining) / total_size * 100)
@@ -61,11 +72,12 @@ def progress_function(stream, chunk, bytes_remaining):
     progress_bar["value"] = percent_complete
     app.update_idletasks()
 
-
 def choose_directory():
     folder_path = tkinter.filedialog.askdirectory()
     save_location.set(folder_path)
 
+def download_video_thread():
+    threading.Thread(target=download_video).start()
 
 # creating app frame
 app = tkinter.Tk()
@@ -105,14 +117,13 @@ save_location = tkinter.StringVar()
 folder_button = tkinter.Button(quality_frame, text="Choose Save Folder", command=choose_directory)
 folder_button.pack(side="left", padx=10)
 
-
 # progress bar
 progress_bar = ttk.Progressbar(app, orient='horizontal', length=200, mode='determinate')
 progress_bar.pack(padx=20, pady=20)
 progress_bar.pack_forget()
 
 # download button
-download = tkinter.Button(app, text="Download", command=download_video)
+download = tkinter.Button(app, text="Download", command=download_video_thread)
 download.pack(padx=20, pady=20)
 
 # footer
